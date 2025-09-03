@@ -29,7 +29,24 @@ self.addEventListener("install", (event) => {
       .then((cache) => {
         console.log("Service Worker: Caching app shell");
         // Add all the app shell files to the cache
-        return cache.addAll(urlsToCache);
+        cache.addAll(urlsToCache);
+
+        fetch("https://dummyjson.com/products")
+          .then((res) => res.json())
+          .then((data) => {
+            const imageUrls = [];
+            data.products.forEach((product) => {
+              if (product.thumbnail) imageUrls.push(product.thumbnail);
+              if (Array.isArray(product.images)) {
+                product.images.forEach((img) => imageUrls.push(img));
+              }
+            });
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.addAll(imageUrls);
+            });
+          });
+
+        return;
       })
       .catch((error) => {
         console.error("Failed to cache app shell:", error);
