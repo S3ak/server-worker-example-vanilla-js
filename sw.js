@@ -1,18 +1,3 @@
-// Request notification permission and send a push notification after 4 seconds
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    (async () => {
-      if (self.registration && self.registration.showNotification) {
-        // Wait 4 seconds, then show notification
-        await new Promise(res => setTimeout(res, 4000));
-        self.registration.showNotification('Hello user', {
-          body: 'This is a push notification from your PWA!',
-          icon: '/media/logo-192.png',
-        });
-      }
-    })()
-  );
-});
 console.log("Service Worker script loaded");
 
 // Define a name for our cache
@@ -90,5 +75,27 @@ self.addEventListener("fetch", (event) => {
       console.log("Fetching from network:", event.request.url);
       return fetch(event.request);
     })
+  );
+});
+
+// Request notification permission and send a push notification after 4 seconds
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    (async () => {
+      if (self.registration && self.registration.showNotification) {
+        // Wait 4 seconds, then show first notification
+        await new Promise((res) => setTimeout(res, 4000));
+        self.registration.showNotification("Hello user", {
+          body: "This is a push notification from your PWA!",
+          icon: "/media/logo-192.png",
+        });
+        // Wait another 6 seconds (total 10 seconds), then show second notification
+        await new Promise((res) => setTimeout(res, 6000));
+        self.registration.showNotification("Hello again!", {
+          body: "This is your second push notification.",
+          icon: "/media/logo-192.png",
+        });
+      }
+    })()
   );
 });
