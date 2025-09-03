@@ -1,3 +1,18 @@
+// Request notification permission and send a push notification after 4 seconds
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    (async () => {
+      if (self.registration && self.registration.showNotification) {
+        // Wait 4 seconds, then show notification
+        await new Promise(res => setTimeout(res, 4000));
+        self.registration.showNotification('Hello user', {
+          body: 'This is a push notification from your PWA!',
+          icon: '/media/logo-192.png',
+        });
+      }
+    })()
+  );
+});
 console.log("Service Worker script loaded");
 
 // Define a name for our cache
