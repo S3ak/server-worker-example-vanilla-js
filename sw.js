@@ -12,6 +12,7 @@ const urlsToCache = [
   "/manifest.json",
   "/media/logo-512.png",
   "/media/logo-192.png",
+  "https://dummyjson.com/products",
   // Add any other core files your app depends on
 ];
 
